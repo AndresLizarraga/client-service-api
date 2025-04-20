@@ -1,6 +1,7 @@
 package com.pinapp.clientservice.service;
 
 import com.pinapp.clientservice.exception.CustomerNotFoundException;
+import com.pinapp.clientservice.messaging.publisher.ClientEventPublisher;
 import com.pinapp.clientservice.model.Customer;
 import com.pinapp.clientservice.dto.CustomerDTO;
 import com.pinapp.clientservice.dto.CustomerMetricsDTO;
@@ -21,10 +22,17 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private ClientEventPublisher clientEventPublisher;
+
     public Customer createCustomer(CustomerDTO customerDTO) {
         logger.info("Creating customer: " + customerDTO.getName());
         Customer newCustomer = buildCustomer(customerDTO);
-        return customerRepository.save(newCustomer);
+        newCustomer = customerRepository.save(newCustomer);
+
+        clientEventPublisher.publishClientCreatedEvent(customerDTO);
+
+        return newCustomer;
     }
 
     public List<Customer> listAllCustomers() {

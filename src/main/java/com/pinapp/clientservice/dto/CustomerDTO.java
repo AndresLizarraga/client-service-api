@@ -1,12 +1,18 @@
 package com.pinapp.clientservice.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
 @Builder
-public class CustomerDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CustomerDTO implements Serializable {
 
     @NotBlank(message = "name cannot be null or empty")
     @Pattern(regexp = "^[A-Za-z]+$", message = "Name can only contain letters")
