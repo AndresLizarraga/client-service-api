@@ -1,5 +1,6 @@
 package com.pinapp.clientservice.service;
 
+import com.pinapp.clientservice.dto.CustomerBirthdayDTO;
 import com.pinapp.clientservice.dto.CustomerDTO;
 import com.pinapp.clientservice.dto.CustomerMetricsDTO;
 import com.pinapp.clientservice.exception.CustomerNotFoundException;
@@ -69,10 +70,26 @@ public class CustomerServiceTest {
 
     @Test
     void shouldListAllCustomers() {
-        List<Customer> mockCustomers = List.of(new Customer(), new Customer());
+        Customer savedCustomer = Customer.builder()
+                .id(1L)
+                .name("Andres")
+                .lastName("Lizarraga")
+                .age(30)
+                .birthDay(DateUtils.parseDate("1994-04-19"))
+                .build();
+
+        Customer savedCustomer2 = Customer.builder()
+                .id(1L)
+                .name("Carlos")
+                .lastName("Perez")
+                .age(35)
+                .birthDay(DateUtils.parseDate("1990-01-19"))
+                .build();
+
+        List<Customer> mockCustomers = List.of(savedCustomer, savedCustomer2);
         when(customerRepository.findAll()).thenReturn(mockCustomers);
 
-        List<Customer> result = customerService.listAllCustomers();
+        List<CustomerBirthdayDTO> result = customerService.listAllCustomers();
 
         assertEquals(2, result.size());
         verify(logger).info("Obtaining all customers...");

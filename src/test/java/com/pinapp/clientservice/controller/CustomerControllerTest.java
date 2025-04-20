@@ -10,11 +10,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pinapp.clientservice.dto.CustomerBirthdayDTO;
 import com.pinapp.clientservice.dto.CustomerDTO;
 import com.pinapp.clientservice.dto.CustomerMetricsDTO;
 import com.pinapp.clientservice.exception.CustomerNotFoundException;
 import com.pinapp.clientservice.model.Customer;
 import com.pinapp.clientservice.service.CustomerService;
+import com.pinapp.clientservice.util.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,9 +43,26 @@ public class CustomerControllerTest {
 
     @Test
     void shouldReturnAllCustomers() throws Exception {
-        List<Customer> mockCustomers = List.of(
-                Customer.builder().id(1L).name("Ana").build(),
-                Customer.builder().id(2L).name("Luis").build()
+
+        Customer customer = Customer.builder()
+                .id(1L)
+                .name("Andres")
+                .lastName("Lizarraga")
+                .age(30)
+                .birthDay(DateUtils.parseDate("1994-04-19"))
+                .build();
+
+        Customer customer2 = Customer.builder()
+                .id(1L)
+                .name("Carlos")
+                .lastName("Perez")
+                .age(35)
+                .birthDay(DateUtils.parseDate("1990-01-19"))
+                .build();
+
+        List<CustomerBirthdayDTO> mockCustomers = List.of(
+                new CustomerBirthdayDTO(customer, 20),
+                new CustomerBirthdayDTO(customer, 30)
         );
 
         when(customerService.listAllCustomers()).thenReturn(mockCustomers);
@@ -51,8 +70,8 @@ public class CustomerControllerTest {
         mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].name").value("Ana"))
-                .andExpect(jsonPath("$[1].name").value("Luis"));
+                .andExpect(jsonPath("$[0].daysUntilBirthday").value(20))
+                .andExpect(jsonPath("$[1].daysUntilBirthday").value(30));
     }
 
     @Test
