@@ -1,5 +1,6 @@
 package com.pinapp.clientservice.service;
 
+import com.pinapp.clientservice.dto.CustomerBirthdayDTO;
 import com.pinapp.clientservice.exception.CustomerNotFoundException;
 import com.pinapp.clientservice.messaging.publisher.ClientEventPublisher;
 import com.pinapp.clientservice.model.Customer;
@@ -11,7 +12,10 @@ import com.pinapp.clientservice.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -35,9 +39,9 @@ public class CustomerService {
         return newCustomer;
     }
 
-    public List<Customer> listAllCustomers() {
+    public List<CustomerBirthdayDTO> listAllCustomers() {
         logger.info("Obtaining all customers...");
-        return customerRepository.findAll();
+        return mapCustomersToBirthdayDTO(customerRepository.findAll());
     }
 
     public Customer findCustomerById(Long id) {
@@ -70,6 +74,28 @@ public class CustomerService {
                 .ageAvg(ageAvg != null ? ageAvg : 0.00)
                 .ageStandardDeviation(ageStandardDeviation != null ? ageStandardDeviation : 0.00)
                 .build();
+    }
+
+    public static List<CustomerBirthdayDTO> mapCustomersToBirthdayDTO(List<Customer> customers) {
+        LocalDate today = LocalDate.now();
+
+        return customers.stream()
+                .map(customer -> {
+                    LocalDate birthDate = customer.getBirthDay();
+
+                    // Set birthday for the current year
+                    LocalDate nextBirthday = birthDate.withYear(today.getYear());
+
+                    // If already passed or today, use next year
+                    if (!nextBirthday.isAfter(today)) {
+                        nextBirthday = nextBirthday.plusYears(1);
+                    }
+
+                    int daysUntilBirthday = (int) ChronoUnit.DAYS.between(today, nextBirthday);
+
+                    return new CustomerBirthdayDTO(customer, daysUntilBirthday);
+                })
+                .collect(Collectors.toList());
     }
 
 }

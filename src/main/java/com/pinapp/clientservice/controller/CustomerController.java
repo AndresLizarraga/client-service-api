@@ -1,5 +1,6 @@
 package com.pinapp.clientservice.controller;
 
+import com.pinapp.clientservice.dto.CustomerBirthdayDTO;
 import com.pinapp.clientservice.model.Customer;
 import com.pinapp.clientservice.dto.CustomerDTO;
 import com.pinapp.clientservice.dto.CustomerMetricsDTO;
@@ -26,8 +27,9 @@ public class CustomerController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
-    @Operation(summary = "List Customers", description = "Returns a list with all the registered customers")
-    public ResponseEntity<List<Customer>> getAllCustomers() {
+    @Operation(summary = "List Customers",
+            description = "Returns a list with all the registered customers, additionally showing the days left until next birthday of each one")
+    public ResponseEntity<List<CustomerBirthdayDTO>> getAllCustomers() {
         return ResponseEntity.ok(customerService.listAllCustomers());
     }
 
