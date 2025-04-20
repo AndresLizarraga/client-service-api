@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: clientservice
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: postgresql
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: clientservice_app
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/clientservice
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: postgresql
+      JWT_SECRET: mysupersecretkey12345678901234567890
+      SPRING_RABBITMQ_ADDRESSES: amqps://crzuejhe:QZk1_-rvVjhbHAwjPIVZabn7ikgzVzbj@albatross.rmq.cloudamqp.com/crzuejhe
+      SPRING_RABBITMQ_SSL_ENABLED: "true"
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
