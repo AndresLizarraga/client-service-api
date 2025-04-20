@@ -3,6 +3,7 @@ package com.pinapp.clientservice.service;
 import com.pinapp.clientservice.dto.CustomerDTO;
 import com.pinapp.clientservice.dto.CustomerMetricsDTO;
 import com.pinapp.clientservice.exception.CustomerNotFoundException;
+import com.pinapp.clientservice.messaging.publisher.ClientEventPublisher;
 import com.pinapp.clientservice.model.Customer;
 import com.pinapp.clientservice.repository.CustomerRepository;
 import com.pinapp.clientservice.util.AppLogger;
@@ -30,6 +31,9 @@ public class CustomerServiceTest {
     @Mock
     private AppLogger logger;
 
+    @Mock
+    private ClientEventPublisher clientEventPublisher;
+
     @InjectMocks
     private CustomerService customerService;
 
@@ -51,6 +55,8 @@ public class CustomerServiceTest {
                 .build();
 
         when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        doNothing().when(clientEventPublisher).publishClientCreatedEvent(any(CustomerDTO.class));
 
         Customer result = customerService.createCustomer(dto);
 
