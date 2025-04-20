@@ -3,33 +3,28 @@ package com.pinapp.clientservice.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Entity
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "customers")
-public class Customer {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(unique = true, nullable = false)
+    private String username;
 
     @Column(nullable = false)
-    private String lastName;
+    private String password;
 
-    @Column(nullable = false)
-    private Integer age;
-
-    @Column(nullable = false)
-    private LocalDate birthDay;
-
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 }
