@@ -34,9 +34,9 @@ You will need the following components pre-installed to run the app locally:
 
 1. Once you cloned the repository, build the project running the maven command:
 
- mvn clean install
+mvn clean install
 
-2. Start PostgreSQL and RabbitMQ containers and run the Spring Boot application:
+2. Start PostgreSQL and RabbitMQ containers and run the Spring Boot application by running the following docker command:
 
 docker-compose up --build
 
