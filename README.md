@@ -20,6 +20,13 @@ A secure and event-driven RESTful API built to manage customer data, supporting 
     - *ControllerAdvice* for centralized exception handling.
     - *SOLID principles* to ensure clean, testable, and maintainable code.
 
+## ☁️ Public Deployment (GCP)
+
+The api is deployed on Google Cloud Run on the public URL:
+
+https://clientservice-1073912160748.us-central1.run.app
+
+
 ## 🚀 Running Locally
 
 You will need the following components pre-installed to run the app locally:
