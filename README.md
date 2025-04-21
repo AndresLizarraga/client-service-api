@@ -55,6 +55,10 @@ http://localhost:8080
 
 Swagger UI is available to explore and test the API interactively:
 
+-Public swagger doc:
+https://clientservice-1073912160748.us-central1.run.app/swagger-ui.html
+
+-Local swagger documentation
 http://localhost:8080/swagger-ui.html
 
 
