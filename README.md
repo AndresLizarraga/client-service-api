@@ -22,6 +22,8 @@ A secure and event-driven RESTful API built to manage customer data, supporting 
 
 ## 🚀 Running Locally
 
+You will need the following components pre-installed to run the app locally:
+
 ### Requirements
 
 - Java 21
@@ -30,21 +32,23 @@ A secure and event-driven RESTful API built to manage customer data, supporting 
 
 ### Steps
 
-1. Once you cloned the repository, build the project:
+1. Once you cloned the repository, build the project running the maven command:
 
-./mvnw clean install
+ mvn clean install
 
-2. Start PostgreSQL and RabbitMQ containers:
+2. Start PostgreSQL and RabbitMQ containers and run the Spring Boot application:
 
-docker-compose up -d
-
-3. Run the Spring Boot application:
-
-/mvnw spring-boot:run
+docker-compose up --build
 
 The API will be available at:
 
 http://localhost:8080
+
+## 📘 API Documentation
+
+Swagger UI is available to explore and test the API interactively:
+
+http://localhost:8080/swagger-ui.html
 
 
 ## 🔐 Authentication
@@ -67,8 +71,3 @@ Once authenticated, you'll receive a JWT token that must be included in the `Aut
 
 Authorization: Bearer <your_token_here>
 
-## 📘 API Documentation
-
-Swagger UI is available to explore and test the API interactively:
-
-http://localhost:8080/swagger-ui.html
